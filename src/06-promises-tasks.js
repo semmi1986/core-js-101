@@ -97,15 +97,26 @@ function getFastestPromise(array) {
  *
  */
 function chainPromises(array, action) {
-  const newArr = [];
-  return new Promise(
-    (resolve) => {
-      array.forEach((el) => {
-        el.then((resolved) => newArr.push(resolved).catch(() => 'next'));
-      });
-      resolve(array);
-    },
-  ).then(() => newArr.reduce(action));
+  return new Promise((resolve) => {
+    const newArr = [];
+    let size = array.length;
+    const Resolve = (res) => {
+      newArr.push(res);
+      size -= 1;
+      if (size === 0) {
+        resolve(newArr.reduce(action));
+      }
+    };
+    const Error = () => {
+      size -= 1;
+      if (size === 0) {
+        resolve(newArr.reduce(action));
+      }
+    };
+    for (let i = 0; i < array.length; i += 1) {
+      array[i].then(Resolve).catch(Error);
+    }
+  });
 }
 
 module.exports = {
