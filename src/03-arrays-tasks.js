@@ -590,8 +590,21 @@ function getElementByIndexes(arr, indexes) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let resArr = [];
+  if (arr.length % 2 === 0) {
+    const start = arr.slice(0, arr.length / 2);
+    const end = arr.slice(arr.length / 2);
+    resArr = [...end, ...start];
+  } else if (arr.length === 1) {
+    resArr = arr;
+  } else {
+    const center = arr[Math.floor(arr.length / 2)];
+    const start = [...arr.slice(0, arr.indexOf(center))];
+    const end = arr.slice(-Math.floor(arr.length / 2));
+    resArr = [...end, center, ...start];
+  }
+  return resArr;
 }
 
 
